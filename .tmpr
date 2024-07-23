@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Real-time Chart</title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+  <figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+      kProject AIA Graph Example
+    </p>
+  </figure>
+
+  <script>
+    const chart = Highcharts.chart('container', {
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: 'Tmpr graph'
+      },
+      xAxis: {
+        categories: []
+      },
+      yAxis: {
+        title: {
+          text: 'Temperature (°C)'
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: false
+        }
+      },
+      series: [{
+        name: 'Temperature',
+        data: []
+      }]
+    });
+
+    function addData(data) {
+      const time = new Date().toLocaleTimeString();
+      chart.xAxis[0].categories.push(time);
+      chart.series[0].addPoint(parseFloat(data), true, true);
+    }
+
+    document.addEventListener('AppInventorReceive', function() {
+      const data = window.AppInventor.getWebViewString();
+      addData(data);
+    });
+  </script>
+</body>
+</html>
